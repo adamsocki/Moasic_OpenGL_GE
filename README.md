@@ -2,7 +2,7 @@
 Mosaic Game Engine Class - OpenGL Assignment
 
 
-# How to create a fresh .sln project file in Visual Studio
+## How to create a fresh .sln project file in Visual Studio
 
 To run your game thru Visual Studio do these steps:
 1. click "Open a Project or Solution"
@@ -12,3 +12,10 @@ To run your game thru Visual Studio do these steps:
 5. Close visual studio.
 6. goto "open a project or solution" and open game.sln
 You must do these steps to use visual studio debugger. Once you open the solution on step 6 you should see a green "Run" button at the top of visual studio. You can run your game using that, and set breakpoints as we discussed in class.
+
+
+## To begin code from my_game.cpp
+
+Change the following in game_code.cpp:
+1. #define MOSAIC 0
+2. #define MY_GAME 1
