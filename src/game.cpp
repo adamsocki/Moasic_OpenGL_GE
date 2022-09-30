@@ -286,6 +286,39 @@ void GameInit(GameMemory *gameMem) {
     }
 
     {
+        LoadShader("shaders/invertedColorsQuadShader_quad.vert", "shaders/invertedColorsQuadShader_quad.frag", &gameMem->invertedColorsQuadShader);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "texture0",
+            "time",
+        };
+        CompileShader(&gameMem->invertedColorsQuadShader, 4, uniforms);
+    }
+    {
+        LoadShader("shaders/ScaleSpriteByNumber.vert", "shaders/ScaleSpriteByNumber.frag", &gameMem->ScaleSpriteByNumber);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "texture0",
+            "number",
+        };
+        CompileShader(&gameMem->ScaleSpriteByNumber, 4, uniforms);
+    }
+
+    {
+        LoadShader("shaders/blendtwo.vert", "shaders/blendtwo.frag", &gameMem->blendTwoShader);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "texture0",
+            "texture1",
+            "time",
+        };
+        CompileShader(&gameMem->blendTwoShader, 4, uniforms);
+    }
+
+    {
         LoadShader("shaders/text.vert", "shaders/text.frag", &gameMem->textShader);
         const char *uniforms[] = {
                                   "model",

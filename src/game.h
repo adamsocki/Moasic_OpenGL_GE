@@ -90,7 +90,13 @@ struct GameMemory {
 
     Shader texturedQuadShader;
 
+    Shader invertedColorsQuadShader;
+
+    Shader blendTwoShader;
+
     Shader instancedQuadShader;
+
+    Shader ScaleSpriteByNumber;
     
     Shader shader;
 
