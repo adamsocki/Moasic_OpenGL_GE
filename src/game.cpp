@@ -265,6 +265,19 @@ void GameInit(GameMemory *gameMem) {
         };
         CompileShader(&gameMem->coolShader, 4, uniforms);
     }
+    {
+        LoadShader("shaders/SpriteSheetShader.vert", "shaders/SpriteSheetShader.frag", &gameMem->SpriteSheetShader);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "index_x",
+            "index_y",
+            "texture_width",
+            "texture_height",
+            "time",
+        };
+        CompileShader(&gameMem->SpriteSheetShader, 4, uniforms);
+    }
 
     {
         LoadShader("shaders/instanced_quad_shader.vert", "shaders/instanced_quad_shader.frag", &gameMem->instancedQuadShader);

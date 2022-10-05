@@ -97,6 +97,7 @@ struct GameMemory {
     Shader instancedQuadShader;
 
     Shader ScaleSpriteByNumber;
+    Shader SpriteSheetShader;
     
     Shader shader;
 
