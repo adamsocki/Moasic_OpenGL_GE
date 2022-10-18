@@ -227,6 +227,9 @@ void GameInit(GameMemory *gameMem) {
     AllocateTriangle(&gameMem->tri);
     InitMesh(&gameMem->tri);
 
+    AllocateSegmentedQuadTopLeft(&gameMem->tessQuad, 1);
+    InitMesh(&gameMem->tessQuad);
+    
     AllocateQuad(&gameMem->quad);
     InitMesh(&gameMem->quad);
 
@@ -245,6 +248,16 @@ void GameInit(GameMemory *gameMem) {
     InitGlyphBuffers(GlyphBufferCount);
 
 #if WINDOWS
+    {
+        LoadShader("shaders/textured_quad.vert", "shaders/textured_quad.frag", &gameMem->tessQuadShader);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "texture0",
+            "time",
+        };
+        CompileShader(&gameMem->tessQuadShader, 4, uniforms);
+    }
     {
         LoadShader("shaders/mesh.vert", "shaders/mesh.frag", &gameMem->shader);
         const char *uniforms[] = {
@@ -276,7 +289,7 @@ void GameInit(GameMemory *gameMem) {
             "texture_height",
             "time",
         };
-        CompileShader(&gameMem->SpriteSheetShader, 4, uniforms);
+        CompileShader(&gameMem->SpriteSheetShader, 7, uniforms);
     }
 
     {

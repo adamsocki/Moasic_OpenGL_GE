@@ -22,6 +22,63 @@ void AllocateTriangle(Mesh *mesh) {
 }
 
 
+void AllocateSegmentedQuad(Mesh* mesh, int32 numOfSegments) {
+    int32 segmentCount = numOfSegments + 1;
+
+    mesh->vertCount = segmentCount * segmentCount;
+    mesh->texcoordsCount = segmentCount * segmentCount;
+
+    mesh->data = (void *)malloc((sizeof(vec3) * mesh->vertCount) +
+                                (sizeof(vec2) * mesh->texcoordsCount));
+
+    mesh->size = (sizeof(vec3) * mesh->vertCount) + (sizeof(vec2) * mesh->texcoordsCount);
+
+    mesh->verts = (vec3*)mesh->data;
+
+    int32 vertLoopCount = 0;
+    for (int i = 0; i < segmentCount; i++) {
+        for (int j = 0; j < segmentCount; j++) {
+            real32 x = (j / segmentCount) - 1.0f;
+            real32 y = (i / segmentCount) - 1.0f;
+            real32 z = 0.0f;
+            mesh->verts[vertLoopCount] = V3(x, y, z);
+            vertLoopCount++;
+        }
+    }
+
+    int32 texcoordsLoopCount = 0;
+    for (int i = 0; i < segmentCount; i++) {
+        for (int j = 0; j < segmentCount; j++) {
+            real32 x = j / segmentCount;
+            real32 y = i / segmentCount;
+            mesh->texcoords[texcoordsLoopCount] = V2(x, y);
+            texcoordsLoopCount++;
+        }
+    }
+
+    mesh->indexCount = segmentCount * segmentCount * 6;
+    mesh->indices = (uint32*)malloc(sizeof(uint32) * mesh->indexCount);
+    
+    int32 count = 0;
+    for (int i = 0; i < segmentCount; i++) {
+        for (int j = 1; j < segmentCount; j++) {
+            mesh->indices[count] = (i * segmentCount) + j;
+            count++;
+            mesh->indices[count] = (i * segmentCount) + j + 1;
+            count++;
+            mesh->indices[count] = ((i + 1) * segmentCount) + j + 1;
+            count++;
+            mesh->indices[count] = (i * segmentCount) + j;
+            count++;
+            mesh->indices[count] = ((i + 1) * segmentCount) + j + 1;
+            count++;
+            mesh->indices[count] = ((i + 1) * segmentCount) + j;
+            count++;
+        }
+    }
+}
+
+
 void AllocateQuad(Mesh *mesh) {
     mesh->vertCount = 4;
     mesh->texcoordsCount = 4;
@@ -59,6 +116,87 @@ void AllocateQuad(Mesh *mesh) {
     mesh->indices[3] = 0;
     mesh->indices[4] = 2;
     mesh->indices[5] = 3;
+}
+
+void AllocateSegmentedQuadTopLeft(Mesh* mesh, int32 numOfSegments) {
+    int32 segmentCount = numOfSegments + 1;
+
+    mesh->vertCount = segmentCount * segmentCount;
+    mesh->texcoordsCount = segmentCount * segmentCount;
+
+    mesh->data = (void*)malloc((sizeof(vec3) * mesh->vertCount) +
+        (sizeof(vec2) * mesh->texcoordsCount));
+
+    mesh->size = (sizeof(vec3) * mesh->vertCount) + (sizeof(vec2) * mesh->texcoordsCount);
+
+    mesh->verts = (vec3*)mesh->data;
+
+    int32 vertLoopCount = 0;
+    for (int i = 0; i < segmentCount; i++)
+    {
+        for (int j = 0; j < segmentCount; j++)
+        {
+            real32 x= (j / numOfSegments);
+            real32 y= (-i / numOfSegments);
+            real32 z = 0.0f;
+            mesh->verts[vertLoopCount] = V3(x, y, z);
+            vertLoopCount++;
+        }
+    }
+
+#if 1
+    int32 texcoordsLoopCount = 0;
+    mesh->texcoords = (vec2*)((uint8*)mesh->data + (sizeof(vec3) * mesh->vertCount));
+    for (int i = 0; i < segmentCount; i++)
+    {
+        for (int j = 0; j < segmentCount; j++)
+        {
+            real32 x = (j / numOfSegments);
+            real32 y = (i / numOfSegments);
+            mesh->texcoords[texcoordsLoopCount] = V2(x, y);
+            texcoordsLoopCount++;
+        }
+    }
+#endif
+
+    mesh->indexCount = numOfSegments * numOfSegments * 6;
+
+    mesh->indices = (uint32*)malloc(sizeof(uint32) * mesh->indexCount);
+
+    int32 count = 0;
+    for (int i = 0; i < numOfSegments; i++)
+    {
+        for (int j = 0; j < numOfSegments; j++)
+        {
+            /*mesh->indices[count] = 0;
+            count++;
+            mesh->indices[count] = 1;
+            count++;
+            mesh->indices[count] = 1;
+            count++;
+            mesh->indices[count] = 0;
+            count++;
+            mesh->indices[count] = 2;
+            count++;
+            mesh->indices[count] = 2;
+            count++;*/
+            mesh->indices[count] = (i * numOfSegments) + j;
+            count++;
+            mesh->indices[count] = (i * numOfSegments) + j + 1;
+            count++;
+            mesh->indices[count] = ((i + 1) * numOfSegments) + j + 2;
+            count++;
+            mesh->indices[count] = (i * numOfSegments) + j;
+            count++;
+            mesh->indices[count] = ((i + 1) * numOfSegments) + j + 1;
+            count++;
+            mesh->indices[count] = ((i + 1) * numOfSegments) + j + 2;
+            count++;
+            
+        }
+    }
+
+
 }
 
 void AllocateQuadTopLeft(Mesh *mesh) {

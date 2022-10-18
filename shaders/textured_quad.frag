@@ -42,7 +42,7 @@ void main() {
     //vec2 uvCenter = vec2(0.5, 0.5) + (0.1 * vec2(cos(time), sin(time)));
     
     
-
+    
     // uv.x += ((1 + sin((time + (uv.y * 8)))) * 0.5);
     // uv.y += time * 0.1;
     // uv.y += time * 0.2 + ((1 + cos((time + (uv.x * 2)))) * 0.5);
@@ -72,8 +72,8 @@ void main() {
     //color.rgb = vec3((1 + d) / 2);
 
     // color.rgb = vec3(0, 0, 0);
-    uv.x += time * 0.2;
-     color.rgb = vec3(uv.x, uv.y, 0);
+   // uv.x += time * 0.2;
+     //color.rgb = vec3(uv.x, uv.y, 0);
 
     //color.rgba = vec4(texcoord.x, texcoord.y, 0, 1);
 }

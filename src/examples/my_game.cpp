@@ -26,7 +26,7 @@ void MyInit() {
     // You provide the path to the png like "directory/to/my/file/file_name.png"
     // In this case I have put the pngs inside the "data" directory.
     LoadSprite(&Data->sprite, "data/galaga_ship.png");
-    LoadSprite(&Data->sprite2, "data/RPGpack_sheet_2X.png");
+    LoadSprite(&Data->sprite2, "data/RPGpack.png");
 
     LoadSprite(&Data->sprite3, "data/rothko.png");
 
@@ -67,10 +67,16 @@ void MyGameUpdate() {
 
    
 
-    switch (Data->currentPhase) {
-        case 1: 
+    switch (Data->currentPhase) 
+    {
+        case 1:
         {
-            SpriteSheetShader(V2(0), V2(4,4), 0, &Data->sprite2, V2(0,0), V2(0));
+            DrawTessSprite(V2(0), V2(4, 4),0, & Data->sprite3);
+            break;
+        }
+        case 5: 
+        {
+            SpriteSheetShader(V2(0,0), V2(4,4), 0, &Data->sprite2, V2(10,10), V2(0));
             break; 
         }
         case 4:

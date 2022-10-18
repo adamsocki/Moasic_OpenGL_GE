@@ -22,10 +22,14 @@ void main() {
 
 
 
-    //in_texcoord.x = 0.5f;
+   //in_texcoord.x = 0.5f;
 
     texcoord = in_texcoord;
 
-    //texcoord.x += 0.5f;
+    //texcoord.x *= (128.0) / 2560.0;
+    //texcoord.x += (128.0) / 2560.0;
+
+   // texcoord.y *= (128.0) / 1664.0;
+    //texcoord.y += (5.0 * 128.0) / 1664.0;
 }
 

@@ -98,6 +98,8 @@ struct GameMemory {
 
     Shader ScaleSpriteByNumber;
     Shader SpriteSheetShader;
+
+    Shader tessQuadShader;
     
     Shader shader;
 
@@ -109,6 +111,7 @@ struct GameMemory {
 
     Mesh tri;
     Mesh quad;
+    Mesh tessQuad;
     Mesh glyphQuad;
     Mesh quadTopLeft;
     Mesh cube;
