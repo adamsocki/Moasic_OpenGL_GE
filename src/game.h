@@ -90,7 +90,16 @@ struct GameMemory {
 
     Shader texturedQuadShader;
 
+    Shader invertedColorsQuadShader;
+
+    Shader blendTwoShader;
+
     Shader instancedQuadShader;
+
+    Shader ScaleSpriteByNumber;
+    Shader SpriteSheetShader;
+
+    Shader tessQuadShader;
     
     Shader shader;
 
@@ -98,10 +107,12 @@ struct GameMemory {
 
     Shader coolShader;
 
-    Shader textShader;
+    Shader textShader;    
+    Shader perlinMixShader;
 
     Mesh tri;
     Mesh quad;
+    Mesh tessQuad;
     Mesh glyphQuad;
     Mesh quadTopLeft;
     Mesh cube;

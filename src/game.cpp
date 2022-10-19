@@ -227,6 +227,9 @@ void GameInit(GameMemory *gameMem) {
     AllocateTriangle(&gameMem->tri);
     InitMesh(&gameMem->tri);
 
+    AllocateSegmentedQuadTopLeft(&gameMem->tessQuad, 3);
+    InitMesh(&gameMem->tessQuad);
+    
     AllocateQuad(&gameMem->quad);
     InitMesh(&gameMem->quad);
 
@@ -245,6 +248,28 @@ void GameInit(GameMemory *gameMem) {
     InitGlyphBuffers(GlyphBufferCount);
 
 #if WINDOWS
+
+    {
+        LoadShader("shaders/perlinMix.vert", "shaders/perlinMix.frag", &gameMem->perlinMixShader);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "texture0",
+            "texture1",
+            "mixture",
+        };
+        CompileShader(&gameMem->perlinMixShader, 5, uniforms);
+    }
+    {
+        LoadShader("shaders/textured_quad.vert", "shaders/textured_quad.frag", &gameMem->tessQuadShader);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "texture0",
+            "time",
+        };
+        CompileShader(&gameMem->tessQuadShader, 4, uniforms);
+    }
     {
         LoadShader("shaders/mesh.vert", "shaders/mesh.frag", &gameMem->shader);
         const char *uniforms[] = {
@@ -265,6 +290,19 @@ void GameInit(GameMemory *gameMem) {
         };
         CompileShader(&gameMem->coolShader, 4, uniforms);
     }
+    {
+        LoadShader("shaders/SpriteSheetShader.vert", "shaders/SpriteSheetShader.frag", &gameMem->SpriteSheetShader);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "index_x",
+            "index_y",
+            "texture_width",
+            "texture_height",
+            "time",
+        };
+        CompileShader(&gameMem->SpriteSheetShader, 7, uniforms);
+    }
 
     {
         LoadShader("shaders/instanced_quad_shader.vert", "shaders/instanced_quad_shader.frag", &gameMem->instancedQuadShader);
@@ -283,6 +321,39 @@ void GameInit(GameMemory *gameMem) {
             "time",
         };
         CompileShader(&gameMem->texturedQuadShader, 4, uniforms);
+    }
+
+    {
+        LoadShader("shaders/invertedColorsQuadShader_quad.vert", "shaders/invertedColorsQuadShader_quad.frag", &gameMem->invertedColorsQuadShader);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "texture0",
+            "time",
+        };
+        CompileShader(&gameMem->invertedColorsQuadShader, 4, uniforms);
+    }
+    {
+        LoadShader("shaders/ScaleSpriteByNumber.vert", "shaders/ScaleSpriteByNumber.frag", &gameMem->ScaleSpriteByNumber);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "texture0",
+            "number",
+        };
+        CompileShader(&gameMem->ScaleSpriteByNumber, 4, uniforms);
+    }
+
+    {
+        LoadShader("shaders/blendtwo.vert", "shaders/blendtwo.frag", &gameMem->blendTwoShader);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "texture0",
+            "texture1",
+            "time",
+        };
+        CompileShader(&gameMem->blendTwoShader, 4, uniforms);
     }
 
     {
