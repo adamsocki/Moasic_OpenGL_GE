@@ -3,6 +3,7 @@ struct MyData {
     Sprite sprite;
     Sprite sprite2;
     Sprite sprite3;
+    Sprite sprite4;
 
     SoundClip sound;
     int32 scaleNumber;
@@ -31,6 +32,8 @@ void MyInit() {
     LoadSprite(&Data->sprite3, "data/rothko.png");
 
     LoadSprite(&lemonSprite, "data/bad_lemon.png");
+
+    LoadSprite(&Data->sprite4, "data/perlinSprite.png");
 
     LoadSoundClip("data/sfx/flute_breathy_c4.wav", &Data->sound);
 }
@@ -70,6 +73,11 @@ void MyGameUpdate() {
     switch (Data->currentPhase) 
     {
         case 1:
+        {
+            DrawPerlinBlendTwo(V2(0), V2(4, 4), 0, &Data->sprite3, &Data->sprite4);
+            break;
+        }
+        case 6:
         {
             DrawTessSprite(V2(0), V2(4, 4),0, & Data->sprite3);
             break;

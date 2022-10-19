@@ -120,6 +120,7 @@ void AllocateQuad(Mesh *mesh) {
 
 void AllocateSegmentedQuadTopLeft(Mesh* mesh, int32 numOfSegments) {
     int32 segmentCount = numOfSegments + 1;
+    real32 numOfSegmentsReal = numOfSegments;
 
     mesh->vertCount = segmentCount * segmentCount;
     mesh->texcoordsCount = segmentCount * segmentCount;
@@ -136,28 +137,27 @@ void AllocateSegmentedQuadTopLeft(Mesh* mesh, int32 numOfSegments) {
     {
         for (int j = 0; j < segmentCount; j++)
         {
-            real32 x= (j / numOfSegments);
-            real32 y= (-i / numOfSegments);
+            real32 x = (j / numOfSegmentsReal) + RandfRange(-1.1f, 1.5f);
+            real32 y = (-i / numOfSegmentsReal) + RandfRange(-1.1f, 1.4f);
             real32 z = 0.0f;
             mesh->verts[vertLoopCount] = V3(x, y, z);
             vertLoopCount++;
         }
     }
 
-#if 1
     int32 texcoordsLoopCount = 0;
+    
     mesh->texcoords = (vec2*)((uint8*)mesh->data + (sizeof(vec3) * mesh->vertCount));
     for (int i = 0; i < segmentCount; i++)
     {
         for (int j = 0; j < segmentCount; j++)
         {
-            real32 x = (j / numOfSegments);
-            real32 y = (i / numOfSegments);
+            real32 x = (j / numOfSegmentsReal);
+            real32 y = (i / numOfSegmentsReal);
             mesh->texcoords[texcoordsLoopCount] = V2(x, y);
             texcoordsLoopCount++;
         }
     }
-#endif
 
     mesh->indexCount = numOfSegments * numOfSegments * 6;
 
@@ -180,17 +180,17 @@ void AllocateSegmentedQuadTopLeft(Mesh* mesh, int32 numOfSegments) {
             count++;
             mesh->indices[count] = 2;
             count++;*/
-            mesh->indices[count] = (i * numOfSegments) + j;
+            mesh->indices[count] = i + (j * segmentCount);
             count++;
-            mesh->indices[count] = (i * numOfSegments) + j + 1;
+            mesh->indices[count] = i + (j * segmentCount) + 1;
             count++;
-            mesh->indices[count] = ((i + 1) * numOfSegments) + j + 2;
+            mesh->indices[count] = i + (j * segmentCount) + 1 + segmentCount;
             count++;
-            mesh->indices[count] = (i * numOfSegments) + j;
+            mesh->indices[count] = i + (j * segmentCount);
             count++;
-            mesh->indices[count] = ((i + 1) * numOfSegments) + j + 1;
+            mesh->indices[count] = i + (j * segmentCount) + 1 + segmentCount;
             count++;
-            mesh->indices[count] = ((i + 1) * numOfSegments) + j + 2;
+            mesh->indices[count] = i + (j * segmentCount) + segmentCount;
             count++;
             
         }

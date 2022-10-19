@@ -107,7 +107,8 @@ struct GameMemory {
 
     Shader coolShader;
 
-    Shader textShader;
+    Shader textShader;    
+    Shader perlinMixShader;
 
     Mesh tri;
     Mesh quad;

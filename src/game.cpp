@@ -227,7 +227,7 @@ void GameInit(GameMemory *gameMem) {
     AllocateTriangle(&gameMem->tri);
     InitMesh(&gameMem->tri);
 
-    AllocateSegmentedQuadTopLeft(&gameMem->tessQuad, 1);
+    AllocateSegmentedQuadTopLeft(&gameMem->tessQuad, 3);
     InitMesh(&gameMem->tessQuad);
     
     AllocateQuad(&gameMem->quad);
@@ -248,6 +248,18 @@ void GameInit(GameMemory *gameMem) {
     InitGlyphBuffers(GlyphBufferCount);
 
 #if WINDOWS
+
+    {
+        LoadShader("shaders/perlinMix.vert", "shaders/perlinMix.frag", &gameMem->perlinMixShader);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "texture0",
+            "texture1",
+            "mixture",
+        };
+        CompileShader(&gameMem->perlinMixShader, 5, uniforms);
+    }
     {
         LoadShader("shaders/textured_quad.vert", "shaders/textured_quad.frag", &gameMem->tessQuadShader);
         const char* uniforms[] = {

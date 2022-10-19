@@ -29,7 +29,7 @@ void main() {
    // vec4 textureContrib_1 = texture(texture1, uv).rgba;
     //textureContrib_1.a = 0.5;
    // textureContrib_1.r /= 2;
-    // vec4 textureContrib = texture(texture0, uv).rgba;
+   //ss vec4 textureContrib = texture(texture0, uv).rgba;
     //color.rgba = textureContrib_0 + textureContrib_1;
 
    color.rgba = mix(texture(texture0, texcoord), texture(texture1, texcoord), 0.65);
