@@ -36,6 +36,18 @@ void MyInit() {
     LoadSprite(&Data->sprite4, "data/perlinSprite.png");
 
     LoadSoundClip("data/sfx/flute_breathy_c4.wav", &Data->sound);
+
+
+    Camera* cam = &Game->camera;
+    cam->type = CameraType_Perspective;
+    cam->projection = Perspective(DegToRad(80.0f), 16.0f / 9.0f, 0.1f, 1000.0f);
+    Game->cameraPosition = V3(0, 0, -10);
+    Game->cameraRotation = IdentityQuaternion();
+
+    mat4 camWorld = TRS(Game->cameraPosition, Game->cameraRotation, V3(1));
+    cam->view = OrthogonalInverse(camWorld);
+
+    cam->viewProjection = cam->projection * cam->view;
 }
 
 
@@ -64,15 +76,59 @@ void MyGameUpdate() {
 
 
     if (InputPressed(Keyboard, Input_Space)) {
-        PlaySound(&Game->audioPlayer, Data->sound, 1.0f, true);
+        //PlaySound(&Game->audioPlayer, Data->sound, 1.0f, true);
         Data->currentPhase++;
     }
+    //Camera* cam = &Game->camera;
 
-   
+   // Game->cameraRotation = AxisAngle(V3(1, 0, 0), sinf(Game->time) * 0.4f) * AxisAngle(V3(0, 1, 0), 0.0f);
 
+   // Game->cameraPosition = V3(0, 2, -10);
+
+    //mat4 camWorld = TRS(Game->cameraPosition, Game->cameraRotation, V3(1));
+   // cam->view = OrthogonalInverse(camWorld);
+   // cam->viewProjection = cam->projection * cam->view;
+
+
+    // cube vert
+    
     switch (Data->currentPhase) 
     {
         case 1:
+        {
+
+            vec3 objPos = V3(mousePos.x, mousePos.y, -2.0f);
+            vec3 lightPos = V3(0.0f, 0.0f, 2.0f);
+
+            // TODO: Create a cube
+            // 1. add vertitices for cube
+            // 2. create shader files for cube (called cube_test.vert & cube_test.frag)
+            //      Created, copied from mesh.vert && mesh.frag
+
+            DrawCubeLightTest(&Game->cube, objPos, AxisAngle(V3(0, 0, 0), Game->time), V3(1), RGB(1.0f, 0.5f, 0.31f), RGB(1.0f, 1.0f, 1.0f), 0.5f, lightPos);
+            DrawCubeLightTest(&Game->cube, lightPos, AxisAngle(V3(0, 0, 0), Game->time), V3(1), RGB(1.0f, 1.0f, 1.0f));
+
+            //DrawMesh(&Game->cube, V3(0.0f), IdentityQuaternion(), V3(1), RGB(1.0f, 0.3f, 0.3f));
+            //DrawMesh(&Game->cube, V3(0.0f), AxisAngle(V3(0, 1, 0), Game->time), V3(1), RGB(1.0f, 0.3f, 0.3f));
+            //DrawMeshLit(&Game->cube, V3(0.0f), AxisAngle(V3(0, 1, 0), Game->time), V3(1), RGB(1.0f, 0.3f, 0.3f));
+            break;
+        }
+        case 2:
+        {
+            SpriteSheetShader(V2(0, 0), V2(4, 4), 0, &Data->sprite2, V2(10, 10), V2(0));
+           
+
+            break;
+
+        }
+        
+        default:
+        {
+            Data->currentPhase = 1;
+            break;
+        }
+
+        /*case 1:
         {
             DrawPerlinBlendTwo(V2(0), V2(4, 4), 0, &Data->sprite3, &Data->sprite4);
             break;
@@ -112,7 +168,7 @@ void MyGameUpdate() {
         {
             Data->currentPhase = 1;
             break;
-        }
+        }*/
     }
     
     

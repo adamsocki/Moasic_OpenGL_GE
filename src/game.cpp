@@ -271,6 +271,19 @@ void GameInit(GameMemory *gameMem) {
         CompileShader(&gameMem->tessQuadShader, 4, uniforms);
     }
     {
+        LoadShader("shaders/cube_test.vert", "shaders/cube_test.frag", &gameMem->cube_test);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "color",
+            "lightColor",
+            "ambientStrength",
+            "lightPos",
+            "time",
+        };
+        CompileShader(&gameMem->cube_test, 7, uniforms);
+    }
+    {
         LoadShader("shaders/mesh.vert", "shaders/mesh.frag", &gameMem->shader);
         const char *uniforms[] = {
             "model",

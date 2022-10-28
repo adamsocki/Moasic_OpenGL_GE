@@ -293,6 +293,50 @@ void InitGlyphBuffers(int32 count) {
     }
 }
 
+void DrawCubeLightTest(Mesh* mesh, vec3 pos, quaternion rotation, vec3 scale, vec4 color, vec4 lightColor , real32 ambientStrength, vec3 lightPos) {
+    Shader* shader = &Game->cube_test;
+    SetShader(shader);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    mat4 model = TRS(pos, rotation, scale);
+
+    glUniformMatrix4fv(shader->uniforms[0].id, 1, GL_FALSE, model.data);
+    glUniformMatrix4fv(shader->uniforms[1].id, 1, GL_FALSE, Game->camera.viewProjection.data);
+
+    glUniform4fv(shader->uniforms[2].id, 1, color.data);
+    glUniform4fv(shader->uniforms[3].id, 1, lightColor.data);
+
+    glUniform1fv(shader->uniforms[4].id, 1, &ambientStrength);
+    glUniform4fv(shader->uniforms[5].id, 1, lightPos.data);
+
+    glUniform1fv(shader->uniforms[6].id, 1, &Game->time);
+
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->vertBufferID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBufferID);
+
+    // 1st attribute buffer : vertices
+    int vert = glGetAttribLocation(shader->programID, "vertexPosition_modelspace");
+    glEnableVertexAttribArray(vert); 
+    glVertexAttribPointer(vert, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+   
+    // 2nd attribute buffer : normals
+    int normals = glGetAttribLocation(shader->programID, "normals");
+    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(normals);
+    glVertexAttribPointer(normals, 3, GL_FLOAT, GL_FALSE, 0, (void*)((sizeof(vec3) * mesh->vertCount)));
+
+    glDrawElements(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (GLvoid*)0);
+
+    glDisableVertexAttribArray(vert);
+}
+
+void DrawCubeLightTest(Mesh* mesh, vec3 pos, quaternion rotation, vec3 scale, vec4 color) {
+    DrawCubeLightTest(mesh, pos, rotation, scale, color, V4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, V3(1.0f, 1.0f, 0.0f));
+}
+
+
 void DrawTessSprite(vec2 position, vec2 scale, real32 angle, Sprite* texture) {
     Shader* shader = &Game->tessQuadShader;
     SetShader(shader);

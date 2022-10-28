@@ -110,6 +110,8 @@ struct GameMemory {
     Shader textShader;    
     Shader perlinMixShader;
 
+    Shader cube_test;
+
     Mesh tri;
     Mesh quad;
     Mesh tessQuad;
