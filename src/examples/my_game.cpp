@@ -40,11 +40,12 @@ void MyInit() {
 
     Camera* cam = &Game->camera;
     cam->type = CameraType_Perspective;
-    cam->projection = Perspective(DegToRad(80.0f), 16.0f / 9.0f, 0.1f, 1000.0f);
+    cam->projection = Perspective(1, 16.0f / 9.0f, 0.1f, 1000.0f);
     Game->cameraPosition = V3(0, 0, -10);
     Game->cameraRotation = IdentityQuaternion();
+   //// gameMem->cameraRotation = AxisAngle(V3(0, 1, 0), gameMem->camAngle);
 
-    mat4 camWorld = TRS(Game->cameraPosition, Game->cameraRotation, V3(1));
+   mat4 camWorld = TRS(Game->cameraPosition, Game->cameraRotation, V3(0));
     cam->view = OrthogonalInverse(camWorld);
 
     cam->viewProjection = cam->projection * cam->view;
@@ -54,6 +55,8 @@ void MyInit() {
 vec2 position = V2(4, 0);
 
 vec2 scale = V2(1, 1);
+
+real32 zPos = 0.0f;
 
 void MyGameUpdate() {
     // This sets the background color. 
@@ -79,39 +82,56 @@ void MyGameUpdate() {
         //PlaySound(&Game->audioPlayer, Data->sound, 1.0f, true);
         Data->currentPhase++;
     }
-    //Camera* cam = &Game->camera;
+   Camera* cam = &Game->camera;
+   /*
+   Game->cameraRotation = AxisAngle(V3(1, 0, 0), sinf(Game->time) * 0.4f) * AxisAngle(V3(0, 1, 0), 0.0f);
 
-   // Game->cameraRotation = AxisAngle(V3(1, 0, 0), sinf(Game->time) * 0.4f) * AxisAngle(V3(0, 1, 0), 0.0f);
+   Game->cameraPosition = V3(0, 2, -10);
 
-   // Game->cameraPosition = V3(0, 2, -10);
-
-    //mat4 camWorld = TRS(Game->cameraPosition, Game->cameraRotation, V3(1));
-   // cam->view = OrthogonalInverse(camWorld);
-   // cam->viewProjection = cam->projection * cam->view;
+   mat4 camWorld = TRS(Game->cameraPosition, Game->cameraRotation, V3(1));
+   cam->view = OrthogonalInverse(camWorld);
+   cam->viewProjection = cam->projection * cam->view;*/
 
 
-    // cube vert
-    
+    // cube vert4
     switch (Data->currentPhase) 
     {
+
         case 1:
         {
+            vec3 objPos = V3(mousePos.x, mousePos.y, zPos);
+            vec3 lightPos = V3(-1.0f, 0.0f, 0.0f);
 
-            vec3 objPos = V3(mousePos.x, mousePos.y, -2.0f);
-            vec3 lightPos = V3(0.0f, 0.0f, 2.0f);
+            if (InputHeld(Keyboard, Input_W)) {
+                //PlaySound(&Game->audioPlayer, Data->sound, 1.0f, true);
+                zPos += Game->deltaTime * 2;
+            }
+            if (InputHeld(Keyboard, Input_S)) {
+                //PlaySound(&Game->audioPlayer, Data->sound, 1.0f, true);
+                zPos -= Game->deltaTime * 2;
+            }
+
 
             // TODO: Create a cube
             // 1. add vertitices for cube
             // 2. create shader files for cube (called cube_test.vert & cube_test.frag)
             //      Created, copied from mesh.vert && mesh.frag
 
-            DrawCubeLightTest(&Game->cube, objPos, AxisAngle(V3(0, 0, 0), Game->time), V3(1), RGB(1.0f, 0.5f, 0.31f), RGB(1.0f, 1.0f, 1.0f), 0.5f, lightPos);
-            DrawCubeLightTest(&Game->cube, lightPos, AxisAngle(V3(0, 0, 0), Game->time), V3(1), RGB(1.0f, 1.0f, 1.0f));
+            DrawCubeLightTest(&Game->cube, lightPos, AxisAngle(V3(0, 1, 1), Game->time), V3(1), RGB(1.0f, 1.0f, 1.0f));
+            DrawCubeLightTest(&Game->cube, objPos, AxisAngle(V3(1, 0, 0), Game->time), V3(1), RGB(1.0f, 0.5f, 0.31f), RGB(1.0f, 1.0f, 1.0f), 0.5f, lightPos);
 
             //DrawMesh(&Game->cube, V3(0.0f), IdentityQuaternion(), V3(1), RGB(1.0f, 0.3f, 0.3f));
             //DrawMesh(&Game->cube, V3(0.0f), AxisAngle(V3(0, 1, 0), Game->time), V3(1), RGB(1.0f, 0.3f, 0.3f));
             //DrawMeshLit(&Game->cube, V3(0.0f), AxisAngle(V3(0, 1, 0), Game->time), V3(1), RGB(1.0f, 0.3f, 0.3f));
             break;
+
+
+
+        }
+        case 9:
+        {
+
+            
         }
         case 2:
         {

@@ -61,7 +61,7 @@ struct GameMemory {
 
     uint32 frame;
     real32 fps;
-    
+
     uint32 screenWidth;
     uint32 screenHeight;
     uint32 pitch;
@@ -90,38 +90,31 @@ struct GameMemory {
 
     Shader texturedQuadShader;
 
-    Shader invertedColorsQuadShader;
-
-    Shader blendTwoShader;
-
     Shader instancedQuadShader;
-
+    //Shader 
+    Shader shader;
+    Shader tessQuadShader;
     Shader ScaleSpriteByNumber;
     Shader SpriteSheetShader;
-
-    Shader tessQuadShader;
-    
-    Shader shader;
-
+    Shader invertedColorsQuadShader;
+    Shader cube_test;
+    Shader blendTwoShader;
     Shader singleLight;
-
+    Shader perlinMixShader;
     Shader coolShader;
 
-    Shader textShader;    
-    Shader perlinMixShader;
-
-    Shader cube_test;
+    Shader textShader;
 
     Mesh tri;
     Mesh quad;
-    Mesh tessQuad;
     Mesh glyphQuad;
     Mesh quadTopLeft;
     Mesh cube;
+    Mesh tessQuad;
 
     InputManager inputManager;
-    InputDevice *keyboard;
-    InputDevice *mouse;
+    InputDevice* keyboard;
+    InputDevice* mouse;
 
     int32 gameIndex;
 
@@ -130,17 +123,17 @@ struct GameMemory {
 
     RectBuffer rectBuffer;
 
-    void *myData;
+    void* myData;
 };
 
 real32 Time = 0;
 real32 DeltaTime = 0;
 
-GameMemory *Game = NULL;
-InputManager *Input = NULL;
+GameMemory* Game = NULL;
+InputManager* Input = NULL;
 
-InputDevice *Keyboard = NULL;
-InputDevice *Mouse = NULL;
+InputDevice* Keyboard = NULL;
+InputDevice* Mouse = NULL;
 
 #define ArrayLength(array, type) sizeof(array)/sizeof(type)
 

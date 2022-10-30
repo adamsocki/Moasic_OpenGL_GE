@@ -7,6 +7,7 @@ uniform mat4 model;
 uniform mat4 viewProjection;
 uniform vec4 color;
 uniform vec4 lightColor;
+uniform vec3 viewPos;
 uniform float time;
 
 out vec4 fs_color;
@@ -16,13 +17,13 @@ out vec3 frag_pos;
 
 void main() {
 
-    vec4 worldVert4 = model * vec4(vertexPosition_modelspace, 1.0f);
+    vec4 worldVert4 = model * vec4(vertexPosition_modelspace, 1.0);
     vec3 worldVert = worldVert4.xyz;
     //worldVert.y += sin(time);
     frag_pos = worldVert;
     
     gl_Position = viewProjection * worldVert4;
-    fs_normal = normals;
+    fs_normal = mat3(transpose(inverse(model))) * normals;
 
     fs_color = color;
 }

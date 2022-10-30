@@ -280,6 +280,7 @@ void GameInit(GameMemory *gameMem) {
             "ambientStrength",
             "lightPos",
             "time",
+            "camPos",
         };
         CompileShader(&gameMem->cube_test, 7, uniforms);
     }
@@ -380,6 +381,7 @@ void GameInit(GameMemory *gameMem) {
         };
         CompileShader(&gameMem->textShader, ARRAY_LENGTH(char *, uniforms), uniforms);
     }
+
 #endif
 
     AudioPlayerInit(&Game->audioPlayer, &Game->permanentArena);

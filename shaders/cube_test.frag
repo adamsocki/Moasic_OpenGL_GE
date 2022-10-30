@@ -8,6 +8,7 @@ in vec3 frag_pos;
 uniform vec4 lightColor;
 uniform float ambientStrength;
 uniform vec3 lightPos;
+uniform vec3 camPos;
 
 //out vec4 color_;
 
@@ -23,6 +24,15 @@ void main(void){
     vec3 diffuse = diff * vec3(lightColor);
 
   //  vec3 ambient = vec3(lightColor) * ambientStrength;
+
+    // specular
+    float specularStrength = 0.5;
+    vec3 viewDir = normalize(camPos - frag_pos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    vec3 specular = specularStrength * spec * vec3(lightColor);  
+
+
     vec3 ambientVal;
     ambientVal.x = ambientStrength;
     ambientVal.y = ambientStrength;
@@ -31,7 +41,7 @@ void main(void){
     vec3 ambient = vec3(lightColor) * ambientVal;
     
     
-    vec3 result = (ambient + diffuse) * vec3(fs_color);
+    vec3 result = (ambient + diffuse + specular) * vec3(fs_color);
 
     //fragColor = vec4(result, 1.0);
     fragColor = vec4(result, 1.0);

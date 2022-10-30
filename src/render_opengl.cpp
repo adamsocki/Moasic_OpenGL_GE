@@ -313,6 +313,9 @@ void DrawCubeLightTest(Mesh* mesh, vec3 pos, quaternion rotation, vec3 scale, ve
 
     glUniform1fv(shader->uniforms[6].id, 1, &Game->time);
 
+
+    glUniform3fv(shader->uniforms[7].id, 1, Game->cameraPosition.data);
+
     glBindBuffer(GL_ARRAY_BUFFER, mesh->vertBufferID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBufferID);
 
@@ -334,6 +337,19 @@ void DrawCubeLightTest(Mesh* mesh, vec3 pos, quaternion rotation, vec3 scale, ve
 
 void DrawCubeLightTest(Mesh* mesh, vec3 pos, quaternion rotation, vec3 scale, vec4 color) {
     DrawCubeLightTest(mesh, pos, rotation, scale, color, V4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, V3(1.0f, 1.0f, 0.0f));
+}
+
+
+
+void DrawFrameBuffer() {
+
+    unsigned int fbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    /*if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);*/
 }
 
 
