@@ -24,7 +24,7 @@ void main(void){
     vec3 diffuse = diff * vec3(lightColor);
 
   //  vec3 ambient = vec3(lightColor) * ambientStrength;
-
+           
     // specular
     float specularStrength = 0.5;
     vec3 viewDir = normalize(camPos - frag_pos);
@@ -44,8 +44,14 @@ void main(void){
     vec3 result = (ambient + diffuse + specular) * vec3(fs_color);
 
     //fragColor = vec4(result, 1.0);
+
+
+   // vec4 final = vec4(texture(screenTexture, result), 1.0);
+   
+
     fragColor = vec4(result, 1.0);
     
+
     
    // vec3 ambient = lightColor * ambientStrength;
    // fragColor = fs_color * ambient;

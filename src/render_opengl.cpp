@@ -1,3 +1,10 @@
+#include <iostream>
+
+// settings
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
+
+
 inline bool glCheckError_(char *file, uint32 line) {
     GLenum _glError = glGetError();
     if (_glError != GL_NO_ERROR) {
@@ -101,6 +108,8 @@ bool ShaderLinked(GLuint shader, char **infoLog) {
 
     return isLinked;
 }
+
+
 
 
 
@@ -293,6 +302,240 @@ void InitGlyphBuffers(int32 count) {
     }
 }
 
+
+void ScreenShaderFirst()
+{
+    unsigned int framebuffer;
+    glGenFramebuffers(1, &framebuffer);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // we're not using the stencil buffer now
+    glEnable(GL_DEPTH_TEST);
+
+}
+
+
+void ScreenShaderSecond()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
+            glClearColor(0.2f, 0.74f, 0.2f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+    //Mesh* mesh = &Game->quad;
+    
+    unsigned int textureColorbuffer;
+    glGenTextures(1, &textureColorbuffer);
+    glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+
+    //unsigned int quadVAO, quadVBO;
+
+
+    float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates. NOTE that this plane is now much smaller and at the top of the screen
+        // positions   // texCoords
+        -1.0f,  1.0f,  0.0f, 1.0f,
+        -1.0f, -1.0f,  0.0f, 0.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+
+        -1.0f,  1.0f,  0.0f, 1.0f,
+         1.0f, -1.0f,  1.0f, 0.0f,
+         1.0f,  1.0f,  1.0f, 1.0f
+    };
+
+    unsigned int quadVAO, quadVBO;
+    glGenVertexArrays(1, &quadVAO);
+    glGenBuffers(1, &quadVBO);
+    glBindVertexArray(quadVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    
+    glDisable(GL_DEPTH_TEST);
+    glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+    glDrawArrays(GL_TRIANGLES, 0, 6);  
+
+}
+
+    
+    /* glGenVertexArrays(1, &quadVAO);
+    glGenBuffers(1, &quadVBO);
+    glBindVertexArray(quadVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(mesh->), &quadVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+ */
+   // glBindVertexArray(quadVAO);
+    
+   
+
+
+
+    //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+    //glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // we're not using the stencil buffer now
+    //glEnable(GL_DEPTH_TEST);
+
+
+
+    //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    //// create a color attachment texture
+    //unsigned int textureColorbuffer;
+    //glGenTextures(1, &textureColorbuffer);
+    //glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAsR);
+    //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+    //// create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+    //unsigned int rbo;
+    //glGenRenderbuffers(1, &rbo);
+    //glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    //glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT); // use a single renderbuffer object for both a depth AND stencil buffer.
+    //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
+    //// now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+    ////if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    //   //s cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    //glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
+
+    //// make sure we clear the framebuffer's content
+    //glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+    //Shader* shader = &Game->screenShader;
+    //SetShader(shader);
+
+    //glUniform1i(shader->uniforms[0].id, 1);
+
+    //unsigned int framebuffer;
+   // glGenFramebuffers(1, &framebuffer);
+   // glDisable(GL_DEPTH_TEST);
+    
+    
+    //sglBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    //// create a color attachment texture
+    //unsigned int textureColorbuffer;
+    //glGenTextures(1, &textureColorbuffer);
+    //glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+    //// create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+    //unsigned int rbo;
+    //glGenRenderbuffers(1, &rbo);
+    //glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    //glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT); // use a single renderbuffer object for both a depth AND stencil buffer.
+    //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
+    //// now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+    //if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+
+    //}
+    //   // cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+   
+
+
+    //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    //glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
+
+    //// make sure we clear the framebuffer's content
+    //glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+void DrawCubeLightTestFB(Mesh* mesh, vec3 pos, quaternion rotation, vec3 scale, vec4 color, vec4 lightColor, real32 ambientStrength, vec3 lightPos) {
+    Shader* shader = &Game->cube_test;
+    SetShader(shader);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+   
+    mat4 model = TRS(pos, rotation, scale);
+
+    glUniformMatrix4fv(shader->uniforms[0].id, 1, GL_FALSE, model.data);
+    glUniformMatrix4fv(shader->uniforms[1].id, 1, GL_FALSE, Game->camera.viewProjection.data);
+
+    glUniform4fv(shader->uniforms[2].id, 1, color.data);
+    glUniform4fv(shader->uniforms[3].id, 1, lightColor.data);
+
+    glUniform1fv(shader->uniforms[4].id, 1, &ambientStrength);
+    glUniform4fv(shader->uniforms[5].id, 1, lightPos.data);
+
+    glUniform1fv(shader->uniforms[6].id, 1, &Game->time);
+
+
+    glUniform3fv(shader->uniforms[7].id, 1, Game->cameraPosition.data);
+
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->vertBufferID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBufferID);
+
+    // 1st attribute buffer : vertices
+    int vert = glGetAttribLocation(shader->programID, "vertexPosition_modelspace");
+    glEnableVertexAttribArray(vert);
+    glVertexAttribPointer(vert, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+    // 2nd attribute buffer : normals
+    int normals = glGetAttribLocation(shader->programID, "normals");
+    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(normals);
+    glVertexAttribPointer(normals, 3, GL_FLOAT, GL_FALSE, 0, (void*)((sizeof(vec3) * mesh->vertCount)));
+
+    unsigned int framebuffer;
+    glGenFramebuffers(1, &framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    // create a color attachment texture
+    unsigned int textureColorbuffer;
+    glGenTextures(1, &textureColorbuffer);
+    glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+    // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+    unsigned int rbo;
+    glGenRenderbuffers(1, &rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT); // use a single renderbuffer object for both a depth AND stencil buffer.
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
+    // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+
+    }
+      //  cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
+
+    // make sure we clear the framebuffer's content
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+    glDrawElements(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (GLvoid*)0);
+
+    glDisableVertexAttribArray(vert);
+}
+
 void DrawCubeLightTest(Mesh* mesh, vec3 pos, quaternion rotation, vec3 scale, vec4 color, vec4 lightColor , real32 ambientStrength, vec3 lightPos) {
     Shader* shader = &Game->cube_test;
     SetShader(shader);
@@ -341,16 +584,126 @@ void DrawCubeLightTest(Mesh* mesh, vec3 pos, quaternion rotation, vec3 scale, ve
 
 
 
-void DrawFrameBuffer() {
-
-    unsigned int fbo;
-    glGenFramebuffers(1, &fbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-    /*if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);*/
-}
+//void DrawFrameBuffer(Mesh* mesh, vec3 pos, quaternion rotation, vec3 scale, vec4 color) {
+//    Shader* shader = &Game->cube_simple;
+//    SetShader(shader);
+//
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//
+//
+//   // Mesh* cubeMesh = &Game->cube;
+//   // Mesh* quadMesh = &Game->quad;
+//
+//
+//    mat4 model = TRS(pos, rotation, scale);
+//
+//    glUniformMatrix4fv(shader->uniforms[0].id, 1, GL_FALSE, model.data);
+//    glUniformMatrix4fv(shader->uniforms[1].id, 1, GL_FALSE, Game->camera.viewProjection.data);
+//    glUniform4fv(shader->uniforms[2].id, 1, color.data);
+//
+//
+//
+//
+//
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBufferID);
+//    glBindBuffer(GL_ARRAY_BUFFER, mesh->vertBufferID);
+//    // cube VAO
+//   // unsigned int cubeVAO, cubeVBO;
+//   // glGenVertexArrays(1, &cubeVAO);
+//   // glGenBuffers(1, &cubeVBO);
+//    //glBindVertexArray(cubeVAO);
+//   // glBindBuffer(GL_ARRAY_BUFFER, mesh->vertBufferID);
+//    
+//   // glBufferData(GL_ARRAY_BUFFER, mesh->size, mesh->data, GL_STATIC_DRAW);
+//
+//
+//    int vert = glGetAttribLocation(shader->programID, "vertexPosition_modelspace");
+//    glEnableVertexAttribArray(vert);
+//    glVertexAttribPointer(vert, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+//
+//    int normals = glGetAttribLocation(shader->programID, "normals");
+//    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+//    glEnableVertexAttribArray(normals);
+//    glVertexAttribPointer(normals, 3, GL_FLOAT, GL_FALSE, 0, (void*)((sizeof(vec3) * mesh->vertCount)));
+//
+//    glDrawElements(GL_TRIANGLES, cubeMesh->indexCount, GL_UNSIGNED_INT, (GLvoid*)0);
+//
+//    glDisableVertexAttribArray(vert);
+//
+//
+//
+//   // // screen quad VAO
+//   // //unsigned int quadVAO, quadVBO;
+//   // glGenVertexArrays(1, &quadVAO);
+//   // glGenBuffers(1, &quadVBO);
+//   // glBindVertexArray(quadVAO);
+//   // glBindBuffer(GL_ARRAY_BUFFER, mesh->vertBufferID);
+//   // //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBufferID);
+//   // glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+//   // glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+//   // glEnableVertexAttribArray(0);
+//   // glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+//   // glEnableVertexAttribArray(1);
+//   // glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+//
+//
+//   // unsigned int framebuffer;
+//   // glGenFramebuffers(1, &framebuffer);
+//   // // create a color attachment texture
+//   // unsigned int textureColorbuffer;
+//   // glGenTextures(1, &textureColorbuffer);
+//   // glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+//
+//
+//
+//   // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+//   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//   // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//   // // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+//   // unsigned int rbo;
+//   // glGenRenderbuffers(1, &rbo);
+//   // glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+//   // glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT); // use a single renderbuffer object for both a depth AND stencil buffer.
+//   //
+//   // 
+//
+//   // glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+//   // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+//   // glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
+//   // // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+//   // if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+//   // {
+//   //     //cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
+//   // }
+//   //     
+//   // glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+//   // glEnable(GL_DEPTH_TEST);
+//
+//   // // CLEAR FB CONTENT
+//   // glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+//   // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//
+//
+//   // // now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
+//   // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//   // glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
+//   // // clear all relevant buffers
+//   // glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
+//   // glClear(GL_COLOR_BUFFER_BIT);
+//
+//   //// screenShader.use();
+//   // glBindVertexArray(quadVAO);
+//   // glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
+//   // glDrawArrays(GL_TRIANGLES, 0, 6);
+//
+//
+//   // // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+//   // // -------------------------------------------------------------------------------
+//   //// glfwSwapBuffers(window);
+//   //// glfwPollEvents();
+//
+//}
 
 
 void DrawTessSprite(vec2 position, vec2 scale, real32 angle, Sprite* texture) {
@@ -389,7 +742,10 @@ void DrawTessSprite(vec2 position, vec2 scale, real32 angle, Sprite* texture) {
     int texcoord = glGetAttribLocation(shader->programID, "in_texcoord");
     glEnableVertexAttribArray(texcoord);
     glVertexAttribPointer(texcoord, 2, GL_FLOAT, GL_FALSE, 0, (void*)((sizeof(vec3) * mesh->vertCount)));
-
+    
+    
+  
+    
     glDrawElements(GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, (GLvoid*)0);
 
     glDisableVertexAttribArray(vert);

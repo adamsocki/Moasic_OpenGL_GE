@@ -102,6 +102,8 @@ struct GameMemory {
     Shader singleLight;
     Shader perlinMixShader;
     Shader coolShader;
+    Shader cube_simple;
+    Shader screenShader;
 
     Shader textShader;
 
@@ -111,6 +113,8 @@ struct GameMemory {
     Mesh quadTopLeft;
     Mesh cube;
     Mesh tessQuad;
+
+    Mesh framBuffer; // maybe quad is fine?
 
     InputManager inputManager;
     InputDevice* keyboard;

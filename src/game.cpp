@@ -250,6 +250,24 @@ void GameInit(GameMemory *gameMem) {
 #if WINDOWS
 
     {
+        LoadShader("shaders/screenShader.vert", "shaders/screenShader.frag", &gameMem->screenShader);
+        const char* uniforms[] = {
+            "screenTexture",
+        };
+        CompileShader(&gameMem->screenShader, 1, uniforms);
+    }
+
+    {
+        LoadShader("shaders/cubeSimple.vert", "shaders/cubeSimple.frag", &gameMem->perlinMixShader);
+        const char* uniforms[] = {
+            "model",
+            "viewProjection",
+            "color",
+        };
+        CompileShader(&gameMem->perlinMixShader, 3, uniforms);
+    }
+
+    {
         LoadShader("shaders/perlinMix.vert", "shaders/perlinMix.frag", &gameMem->perlinMixShader);
         const char* uniforms[] = {
             "model",

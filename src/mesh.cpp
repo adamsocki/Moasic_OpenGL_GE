@@ -278,6 +278,15 @@ void AllocateGlyphQuad(Mesh *mesh) {
     mesh->indices[5] = 3;
 }
 
+void allocateFrameBuffer(Mesh* mesh)
+{
+    
+
+
+
+
+}
+
 
 void AllocateCube(Mesh* mesh) {
     uint32 vertexSize = sizeof(vec3) * sizeof(vec3) + sizeof(vec2);
