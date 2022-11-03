@@ -253,6 +253,7 @@ void GameInit(GameMemory *gameMem) {
         LoadShader("shaders/screenShader.vert", "shaders/screenShader.frag", &gameMem->screenShader);
         const char* uniforms[] = {
             "screenTexture",
+            "time",
         };
         CompileShader(&gameMem->screenShader, 1, uniforms);
     }

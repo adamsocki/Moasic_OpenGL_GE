@@ -318,6 +318,9 @@ void ScreenShaderFirst()
 
 void ScreenShaderSecond()
 {
+
+
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
             glClearColor(0.2f, 0.74f, 0.2f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
@@ -338,13 +341,15 @@ void ScreenShaderSecond()
     float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates. NOTE that this plane is now much smaller and at the top of the screen
         // positions   // texCoords
         -1.0f,  1.0f,  0.0f, 1.0f,
-        -1.0f, -1.0f,  0.0f, 0.0f,
+        -1.0f, -0.5f,  0.0f, 0.0f,
          1.0f, -1.0f,  1.0f, 0.0f,
 
         -1.0f,  1.0f,  0.0f, 1.0f,
          1.0f, -1.0f,  1.0f, 0.0f,
          1.0f,  1.0f,  1.0f, 1.0f
     };
+
+    
 
     unsigned int quadVAO, quadVBO;
     glGenVertexArrays(1, &quadVAO);
@@ -357,6 +362,15 @@ void ScreenShaderSecond()
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
     
+
+    Shader* shader = &Game->screenShader;
+    SetShader(shader);
+
+    glUniform1i(shader->uniforms[0].id, 0);
+
+    glUniform1fv(shader->uniforms[1].id,1, &Game->time);
+
+
     glDisable(GL_DEPTH_TEST);
     glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
     glDrawArrays(GL_TRIANGLES, 0, 6);  

@@ -107,20 +107,17 @@ void MyGameUpdate() {
             vec3 lightPos = V3(-1.0f, 0.0f, 0.0f);
 
 
-           // ScreenShaderFirst();
+            ScreenShaderFirst();
             
             //DrawCubeLightTest(&Game->cube, objPos, AxisAngle(V3(1, 0, 0), Game->time), V3(1), RGB(1.0f, 0.5f, 0.31f), RGB(1.0f, 1.0f, 1.0f), 0.5f, lightPos);
            
             //SpriteSheetShader(V2(0, 0), V2(4, 4), 0, &Data->sprite2, V2(10, 10), V2(0));
-            SpriteSheetShader(V2(0, 0), V2(4, 4), 0, &Data->sprite2, V2(10, 10), V2(0));
+            //SpriteSheetShader(V2(0, 0), V2(4, 4), 0, &Data->sprite2, V2(10, 10), V2(0));
            
 
-           
-           
+            DrawSpriteBlendTwo(V2(0), V2(4, 4), 0, &Data->sprite2, &Data->sprite3);
 
-
-
-           // ScreenShaderSecond();
+            ScreenShaderSecond();
 
              // ------------------------------------------------------------------------
            

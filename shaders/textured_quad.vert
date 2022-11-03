@@ -12,10 +12,12 @@ out vec2 texcoord;
 
 void main() {
 
-    vertexPosition_modelspace.x += sin(time);
+   // vertexPosition_modelspace.x += sin(time);
 
     gl_Position = viewProjection * model * vec4(vertexPosition_modelspace, 1.0f);
 
     texcoord = in_texcoord;
+
+
 }
 
