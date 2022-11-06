@@ -32,9 +32,9 @@ void main() {
    //ss vec4 textureContrib = texture(texture0, uv).rgba;
     //color.rgba = textureContrib_0 + textureContrib_1;
 
-   color.rgba = mix(texture(texture0, texcoord), texture(texture1, texcoord), 0.65);
+   color.rgba = mix(texture(texture0, texcoord), texture(texture1, texcoord),0.5);
    // color.rgba = textureContrib;
-
+   
    // uv.x += 0.3;
    // uv0.x += 0.4;
      //Write a custom shader that outputs a blend of two textures.

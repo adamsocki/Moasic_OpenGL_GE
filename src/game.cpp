@@ -248,12 +248,19 @@ void GameInit(GameMemory *gameMem) {
     InitGlyphBuffers(GlyphBufferCount);
 
 #if WINDOWS
-
+    {
+        LoadShader("shaders/blendTwo.vert", "shaders/blendTwo.frag", &gameMem->blendTwoShader);
+        const char* uniforms[] = {
+            "texture0",
+            "texture1",
+            "time",
+        };
+        CompileShader(&gameMem->blendTwoShader, 3, uniforms);
+    }
     {
         LoadShader("shaders/screenShader.vert", "shaders/screenShader.frag", &gameMem->screenShader);
         const char* uniforms[] = {
             "screenTexture",
-            "time",
         };
         CompileShader(&gameMem->screenShader, 1, uniforms);
     }
@@ -377,17 +384,7 @@ void GameInit(GameMemory *gameMem) {
         CompileShader(&gameMem->ScaleSpriteByNumber, 4, uniforms);
     }
 
-    {
-        LoadShader("shaders/blendtwo.vert", "shaders/blendtwo.frag", &gameMem->blendTwoShader);
-        const char* uniforms[] = {
-            "model",
-            "viewProjection",
-            "texture0",
-            "texture1",
-            "time",
-        };
-        CompileShader(&gameMem->blendTwoShader, 4, uniforms);
-    }
+ 
 
     {
         LoadShader("shaders/text.vert", "shaders/text.frag", &gameMem->textShader);

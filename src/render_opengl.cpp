@@ -1068,10 +1068,10 @@ void DrawSpriteBlendTwo(vec2 position, vec2 scale, real32 angle, Sprite* texture
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture1->textureID);
 
-    glUniform1i(shader->uniforms[2].id, 0);
-    glUniform1i(shader->uniforms[3].id, 1);
+    glUniform1i(shader->uniforms[0].id, 0);
+    glUniform1i(shader->uniforms[1].id, 1);
 
-    glUniform1fv(shader->uniforms[4].id, 1, &Game->time);
+    glUniform1fv(shader->uniforms[2].id, 1, &Game->time);
 
     glBindBuffer(GL_ARRAY_BUFFER, mesh->vertBufferID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBufferID);

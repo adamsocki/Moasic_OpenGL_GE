@@ -6,21 +6,21 @@ out vec4 FragColor;
 in vec2 TexCoords;
 
 uniform sampler2D screenTexture;
-uniform float time;
 
 void main()
 {
    
-   
-   vec2 uv = TexCoords;
-
-    
-    
-    vec3 col = texture(screenTexture, uv).rgb;
-     col.r += cos(time) * 0.4;
-     uv.y += sin(time);
-    //scol.r += ((1 + sin(time)) * 0.5);
+    vec3 col = texture(screenTexture, TexCoords).rgb;
     FragColor = vec4(col, 1.0);
+//   vec2 uv = TexCoords;
+//
+//    
+//    
+//    vec3 col = texture(screenTexture, uv).rgb;
+//     //col.r += cos(time) * 0.4;
+//    // uv.y += sin(time);
+//    //scol.r += ((1 + sin(time)) * 0.5);
+//    FragColor = vec4(vec3(1.0 - texture(screenTexture, TexCoords)), 1.0);
 
 
 //    FragColor = texture(screenTexture, TexCoords);
